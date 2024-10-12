@@ -16,12 +16,13 @@ class UserService{
         }
     };
 
-    async createUser(username,email) {
+    async createUser(username,email,password) {
         const functionName = 'CREATE_USER';
         try {
             const user = await User.create({
                 username,
-                email
+                email,
+                password
             })
             return user;
         } catch (error) {

@@ -7,12 +7,12 @@ class Controller{
 
     async registerUser(req, res, next) {
         const functionName = `${controllerName}| REGISTER_USER - `;
-        const { username, email } = req.body;
+        const { username, email,password } = req.body;
 
         try {
 
             if (
-                [username,email].some((field) =>
+                [username,email,password].some((field) =>
                     field?.trim() == "")
             ) {
                 return res.status(500).json(
@@ -36,7 +36,7 @@ class Controller{
                 )
             }
 
-            const user = await userService.createUser(username, email);
+            const user = await userService.createUser(username, email,password);
 
             return res.status(201).json(
                 new ApiResponse(

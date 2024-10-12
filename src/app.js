@@ -54,6 +54,9 @@ const registerMiddlewares = function () {
 
 const registerRoutes = () => {
     try {
+        app.get('/',(req,res) => {
+            res.send('Server is running fine');
+        })
         app.use('/v1', apiRouter);
     } catch (error) {
         console.log(`Error while registering routes :: ${error}`);
