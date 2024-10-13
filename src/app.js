@@ -75,7 +75,7 @@ const startApp = () => {
 
         connectDB()
             .then(() => {
-                server.listen({ port: PORT, host: HOST })
+                server.listen({ port: PORT})
                 .on('error', (error) => {
                     if (error.syscall !== 'listen') {
                         throw error;
