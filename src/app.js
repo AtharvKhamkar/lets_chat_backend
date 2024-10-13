@@ -94,7 +94,7 @@ const startApp = () => {
                }
                 })
                 .on('listening', () => {
-                    console.log(`Application is running on :: ${HOST}:${PORT}`);
+                    console.log(`Application is running on :: ${PORT}`);
             })
     })
     } catch (error) {

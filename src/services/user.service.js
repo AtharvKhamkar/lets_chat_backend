@@ -3,12 +3,13 @@ import {User} from '../models/user.model.js'
 const serviceName = 'USER_SERVICE';
 
 class UserService{
-    async checkUserExists(username,email) {
+    async checkUserExists(email) {
         const functionName = 'CHECK_USER_EXISTS';
         try {
+            
             const existedUser = await User.findOne({
-                $or:[{username},{email}]
-            })
+                email
+            })            
 
             return existedUser;
         } catch (error) {
@@ -27,6 +28,21 @@ class UserService{
             return user;
         } catch (error) {
             console.log(`${serviceName}|${functionName}Error :: ${error}`);
+        }
+    }
+
+    async loginUser(email,password){
+        const functionName = 'LOGIN_USER';
+        try {
+            const isCorrectCred = await User.findOne({
+                email,
+                password
+            }).select('-password');
+            
+            return isCorrectCred;
+        } catch (error) {
+            console.log(`${serviceName}|${functionName}Error :: ${error}`);
+            
         }
     }
 
