@@ -9,8 +9,8 @@ class UserService{
             
             const existedUser = await User.findOne({
                 email
-            })            
-
+            })   
+            
             return existedUser;
         } catch (error) {
             console.log(`${serviceName}|${functionName}Error :: ${error}`);
@@ -38,6 +38,7 @@ class UserService{
                 email,
                 password
             }).select('-password');
+            
             
             return isCorrectCred;
         } catch (error) {

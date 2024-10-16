@@ -58,6 +58,11 @@ class Controller{
         const email = req.body.email;
         const password = req.body.password;
 
+        console.log(email);
+        console.log(password);
+        
+        
+
         try {
 
             if (
@@ -87,6 +92,7 @@ class Controller{
             }
 
             const loggedInUser = await userService.loginUser(email,password);
+            
             
             return res.status(200).json(
                 new ApiResponse(
