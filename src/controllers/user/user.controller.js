@@ -94,13 +94,23 @@ class Controller{
             const loggedInUser = await userService.loginUser(email,password);
             
             
-            return res.status(200).json(
-                new ApiResponse(
-                    200,
-                    loggedInUser,
-                    'User logged in successfully'
+            if(loggedInUser){
+                return res.status(200).json(
+                    new ApiResponse(
+                        200,
+                        loggedInUser,
+                        'User logged in successfully'
+                    )
                 )
-            )
+            }else{
+                return res.status(500).json(
+                    new ApiResponse(
+                        500,
+                        loggedInUser,
+                        'Invalid Credentials'
+                    )
+                )
+            }
         } catch (error) {
             console.log(`${functionName}ERROR :: ${error}`);
         }
