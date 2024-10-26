@@ -6,6 +6,11 @@ const messageSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref:"Room"
         },
+        content:{
+            type:String,
+            required:true,
+            trim:true
+        },
         senderId: {
             type: Schema.Types.ObjectId,
             ref:"User"
