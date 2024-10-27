@@ -1,4 +1,4 @@
-import chatService from "./chat.service";
+import chatService from "./chat.service.js";
 
 class SocketService{
     async connect(io) {
