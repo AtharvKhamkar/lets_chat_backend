@@ -33,6 +33,19 @@ class ChatService {
       console.log(`${serviceName}|${functionName}Error :: ${error}`);
     }
   }
+
+  async getRoomDetails(roomId){
+    const functionName = 'GET_ROOM_DETAILS';
+    try {
+      const existingRoomDetails = await Room.findOne({
+        roomId
+      });
+
+      return existingRoomDetails;
+    } catch (error) {
+      console.log(`${serviceName}|${functionName}Error :: ${error}`);
+    }
+  }
 }
 
 export default new ChatService();
