@@ -1,3 +1,4 @@
+import { Message } from "../models/message.model.js";
 import { Room } from "../models/room.model.js";
 import { generateChatId } from "../utils/helperFuntions.js";
 
@@ -34,16 +35,39 @@ class ChatService {
     }
   }
 
-  async getRoomDetails(roomId){
-    const functionName = 'GET_ROOM_DETAILS';
+  async getRoomDetails(roomId) {
+    const functionName = "GET_ROOM_DETAILS";
     try {
       const existingRoomDetails = await Room.findOne({
-        roomId
+        roomId,
       });
 
       return existingRoomDetails;
     } catch (error) {
       console.log(`${serviceName}|${functionName}Error :: ${error}`);
+    }
+  }
+
+  async insertMessage(roomId, senderId, content) {
+    const functionName = "INSERT_MESSAGE";
+    try {
+      const createdMessage = await Message.create({
+        roomId,
+        senderId,
+        content,
+      });
+
+      if (createdMessage) {
+        await Room.findByIdAndUpdate(
+          roomId,
+          { $push: { messages: createdMessage._id } },
+          { new: true }
+        );
+      }
+      return createdMessage;
+    } catch (error) {
+      console.error(`${functionName}: Error inserting message - `, error);
+      throw error;
     }
   }
 }
