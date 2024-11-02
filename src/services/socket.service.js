@@ -22,8 +22,7 @@ class SocketService {
           socket.emit("error", "Internal Server Error");
         }
       }),
-
-      //Event for sending message
+        //Event for sending message
         socket.on("message", async (data) => {
           const { roomId, senderId, message } = data;
           try {
@@ -40,7 +39,7 @@ class SocketService {
             });
           } catch (error) {
             console.log(
-              `EventName | Message - Error, errorMessage - ${e.message}`
+              `EventName | Message - Error, errorMessage - ${error.message}`
             );
             socket.emit("error", "Internal Server Error");
           }
