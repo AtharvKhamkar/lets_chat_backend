@@ -51,15 +51,12 @@ class ChatService {
 
   async insertMessage(roomId, senderId, content) {
     const functionName = "INSERT_MESSAGE";
-    const validRoomId = mongoose.Types.ObjectId.isValid(roomId)
-      ? new mongoose.Types.ObjectId(roomId)
-      : null;
     const validSenderId = mongoose.Types.ObjectId.isValid(senderId)
       ? new mongoose.Types.ObjectId(senderId)
       : null;
     try {
       const createdMessage = await Message.create({
-        roomId: validRoomId,
+        roomId,
         senderId: validSenderId,
         content,
       });
