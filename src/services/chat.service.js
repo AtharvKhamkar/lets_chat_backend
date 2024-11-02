@@ -62,8 +62,8 @@ class ChatService {
       });
 
       if (createdMessage) {
-        await Room.findByIdAndUpdate(
-          roomId,
+        await Room.findOneAndUpdate(
+          { roomId },
           { $push: { messages: createdMessage._id } },
           { new: true }
         );
