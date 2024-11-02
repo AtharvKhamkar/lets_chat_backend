@@ -59,8 +59,8 @@ class ChatService {
       : null;
     try {
       const createdMessage = await Message.create({
-        validRoomId,
-        validSenderId,
+        roomId: validRoomId,
+        senderId: validSenderId,
         content,
       });
 
