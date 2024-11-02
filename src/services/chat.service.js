@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { Message } from "../models/message.model.js";
 import { Room } from "../models/room.model.js";
 import { generateChatId } from "../utils/helperFuntions.js";
@@ -50,10 +51,16 @@ class ChatService {
 
   async insertMessage(roomId, senderId, content) {
     const functionName = "INSERT_MESSAGE";
+    const validRoomId = mongoose.Types.ObjectId.isValid(roomId)
+      ? mongoose.Types.ObjectId(roomId)
+      : null;
+    const validSenderId = mongoose.Types.ObjectId.isValid(senderId)
+      ? mongoose.Types.ObjectId(senderId)
+      : null;
     try {
       const createdMessage = await Message.create({
-        roomId,
-        senderId,
+        validRoomId,
+        validSenderId,
         content,
       });
 
