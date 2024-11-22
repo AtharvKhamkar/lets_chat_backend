@@ -45,7 +45,7 @@ class ChatService {
         .populate({
           path: "messages",
           model: "Message",
-          options: { sort: { createdAt: -1 } },
+          options: { sort: { createdAt: 1 } },
           select: "_id senderId content createdAt updatedAt",
 
           populate: {
