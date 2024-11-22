@@ -41,9 +41,52 @@ class ChatService {
     try {
       const existingRoomDetails = await Room.findOne({
         roomId,
-      });
+      })
+        .populate({
+          path: "messages",
+          model: "Message",
+          options: { sort: { createdAt: -1 } },
+          select: "_id senderId content createdAt updatedAt",
 
-      return existingRoomDetails;
+          populate: {
+            path: "senderId",
+            model: "User",
+            select: "_id username", // assuming "name" is the field in User for senderName
+          },
+        })
+        .populate({
+          path: "senderId",
+          model: "User",
+          select: "_id username",
+        })
+        .populate({
+          path: "receiverId",
+          model: "User",
+          select: "_id username",
+        });
+
+      if (!existingRoomDetails) return null;
+
+      return {
+        _id: existingRoomDetails._id,
+        roomId: existingRoomDetails.roomId,
+        senderDetails: {
+          senderId: existingRoomDetails.senderId._id,
+          senderName: existingRoomDetails.senderId.username,
+        },
+        receiverDetails: {
+          receiverId: existingRoomDetails.receiverId._id,
+          receiverName: existingRoomDetails.receiverId.username,
+        },
+        messages: existingRoomDetails.messages.map((msg) => ({
+          Id: msg._id,
+          senderId: msg.senderId._id,
+          senderName: msg.senderId.username,
+          content: msg.content,
+          createdAt: msg.createdAt,
+          updatedAt: msg.updatedAt,
+        })),
+      };
     } catch (error) {
       console.log(`${serviceName}|${functionName}Error :: ${error}`);
     }

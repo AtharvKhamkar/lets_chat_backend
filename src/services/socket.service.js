@@ -5,18 +5,24 @@ class SocketService {
     //Event for joining
     io.on("connection", (socket) => {
       console.log("a user connected");
-      socket.on("join", async (roomId, userId) => {
-        console.log("Join", roomId, userId);
+      socket.on("join", async (data) => {
+        console.log(`Join event ${data}`);
+
+        const { roomId, userId } = data;
+        console.log(`Join event started ${roomId} :: ${userId}`);
 
         socket.join(roomId);
 
+        console.log(`Join event completed ${roomId} :: ${userId}`);
+
         try {
           const chatHistory = await chatService.getRoomDetails(roomId);
-          if (chatHistory && chatHistory.length > 0) {
-            return chatHistory;
-          }
+          // if (chatHistory && chatHistory.length > 0) {
+          //   return chatHistory;
+          // }
+          console.log(`Passed chathistory is ${chatHistory.messages.length}`);
+
           io.to(roomId).emit("chatHistory", chatHistory);
-          return null;
         } catch (error) {
           console.log(`EventName | Join - Error, errorMessage - ${e.message}`);
           socket.emit("error", "Internal Server Error");
@@ -32,11 +38,18 @@ class SocketService {
               message
             );
 
+            console.log(
+              `Result of the added message in the message event is ${addMessageToDB}`
+            );
+
             io.to(roomId).emit("message", {
-              message,
-              timestamp: new Date(),
               senderId,
+              _id: addMessageToDB._id,
+              content: message,
+              timestamp: new Date(),
             });
+
+            console.log("Execution reached after message event is triggered");
           } catch (error) {
             console.log(
               `EventName | Message - Error, errorMessage - ${error.message}`
