@@ -46,7 +46,7 @@ class SocketService {
               senderId,
               _id: addMessageToDB._id,
               content: message,
-              timestamp: new Date(),
+              createdAt: addMessageToDB.createdAt,
             });
 
             console.log("Execution reached after message event is triggered");
