@@ -24,7 +24,9 @@ class SocketService {
 
           io.to(roomId).emit("chatHistory", chatHistory);
         } catch (error) {
-          console.log(`EventName | Join - Error, errorMessage - ${e.message}`);
+          console.log(
+            `EventName | Join - Error, errorMessage - ${error.message}`
+          );
           socket.emit("error", "Internal Server Error");
         }
       }),
@@ -57,6 +59,25 @@ class SocketService {
             socket.emit("error", "Internal Server Error");
           }
         });
+
+      socket.on("typing", async (data) => {
+        let typingStatus = false;
+        const { roomId, receiverId, status } = data;
+        console.log(`received typing status is ${status}`);
+
+        try {
+          typingStatus = status;
+          console.log(
+            `received typing status before sending event is ${typingStatus}`
+          );
+          socket.to(roomId).emit("typing", typingStatus);
+        } catch (error) {
+          console.log(
+            `EventName | Message - Error, errorMessage - ${error.message}`
+          );
+          socket.emit("error", "Internal Server Error");
+        }
+      });
 
       socket.on("disconnect", () => {
         console.log("user disconnected");
