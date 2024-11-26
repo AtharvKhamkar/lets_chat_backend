@@ -46,7 +46,7 @@ class ChatService {
           path: "messages",
           model: "Message",
           options: { sort: { createdAt: 1 } },
-          select: "_id senderId content createdAt updatedAt",
+          select: "_id senderId content messageType createdAt updatedAt",
 
           populate: {
             path: "senderId",
@@ -83,6 +83,7 @@ class ChatService {
           senderId: msg.senderId._id,
           senderName: msg.senderId.username,
           content: msg.content,
+          messageType: msg.messageType,
           createdAt: msg.createdAt,
           updatedAt: msg.updatedAt,
         })),
@@ -92,7 +93,7 @@ class ChatService {
     }
   }
 
-  async insertMessage(roomId, senderId, content) {
+  async insertMessage(roomId, senderId, content, messageType) {
     const functionName = "INSERT_MESSAGE";
     const validSenderId = mongoose.Types.ObjectId.isValid(senderId)
       ? new mongoose.Types.ObjectId(senderId)
@@ -102,6 +103,7 @@ class ChatService {
         roomId,
         senderId: validSenderId,
         content,
+        messageType,
       });
 
       if (createdMessage) {

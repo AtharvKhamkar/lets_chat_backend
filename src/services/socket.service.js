@@ -32,12 +32,13 @@ class SocketService {
       }),
         //Event for sending message
         socket.on("message", async (data) => {
-          const { roomId, senderId, message } = data;
+          const { roomId, senderId, message, messageType } = data;
           try {
             const addMessageToDB = await chatService.insertMessage(
               roomId,
               senderId,
-              message
+              message,
+              messageType
             );
 
             console.log(
@@ -48,6 +49,7 @@ class SocketService {
               senderId,
               _id: addMessageToDB._id,
               content: message,
+              messageType: addMessageToDB.messageType,
               createdAt: addMessageToDB.createdAt,
             });
 

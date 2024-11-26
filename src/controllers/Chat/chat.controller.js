@@ -58,15 +58,17 @@ class Controller {
           .json(new ApiResponse(401, null, "Error while uploading image"));
       }
 
-      return res
-        .status(200)
-        .json(
-          new ApiResponse(
-            200,
-            imageUploadedFile.url,
-            "Image uploaded successfully"
-          )
-        );
+      return res.status(200).json(
+        new ApiResponse(
+          200,
+          {
+            name: imageUploadedFile.original_filename,
+            size: imageUploadedFile.bytes,
+            uri: imageUploadedFile.url,
+          },
+          "Image uploaded successfully"
+        )
+      );
     } catch (error) {
       console.log(`${functionName}ERROR :: ${error}`);
     }
