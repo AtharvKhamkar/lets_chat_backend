@@ -42,12 +42,13 @@ class SocketService {
             );
 
             console.log(
-              `Result of the added message in the message event is ${addMessageToDB}`
+              `Result of the added message in the message event is ${addMessageToDB.messageType}`
             );
 
             io.to(roomId).emit("message", {
+              Id: addMessageToDB._id,
               senderId,
-              _id: addMessageToDB._id,
+              senderName: addMessageToDB.senderName,
               content: message,
               messageType: addMessageToDB.messageType,
               createdAt: addMessageToDB.createdAt,

@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { Message } from "../models/message.model.js";
 import { Room } from "../models/room.model.js";
+import { User } from "..//models/user.model.js";
 import { generateChatId } from "../utils/helperFuntions.js";
 
 const serviceName = "CHAT_SERVICE";
@@ -99,6 +100,16 @@ class ChatService {
       ? new mongoose.Types.ObjectId(senderId)
       : null;
     try {
+      const senderDetails = await User.findById(validSenderId).select(
+        "username"
+      );
+
+      console.log(
+        `User name of the user while inserting message is ${senderDetails.username}`
+      );
+
+      const senderName = senderDetails.username;
+
       const createdMessage = await Message.create({
         roomId,
         senderId: validSenderId,
@@ -113,7 +124,10 @@ class ChatService {
           { new: true }
         );
       }
-      return createdMessage;
+
+      //For converting mongoose object to plain object without converting object destructring wont work
+      const createdMessageObject = createdMessage.toObject();
+      return { ...createdMessageObject, senderName };
     } catch (error) {
       console.error(`${functionName}: Error inserting message - `, error);
       throw error;
