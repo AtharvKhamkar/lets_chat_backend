@@ -1,5 +1,7 @@
-import * as express from 'express';
-import controller from './user.controller.js';
+import * as express from "express";
+import controller from "./user.controller.js";
 
-export default express.Router()
-.get('/users-list',controller.getUserList)
+export default express
+  .Router()
+  .get("/users-list", controller.getUserList)
+  .get("/detail", controller.getUserDetails);
