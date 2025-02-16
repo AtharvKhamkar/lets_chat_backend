@@ -1,4 +1,5 @@
 import chatService from "./chat.service.js";
+import TrackingService from "./tracking.service.js";
 
 class SocketService {
   async connect(io) {
@@ -81,6 +82,45 @@ class SocketService {
           socket.emit("error", "Internal Server Error");
         }
       });
+
+      //Event to handle location sharing
+      socket.on('joinLocationRoom',async(data)=>{
+        const {roomId} = data;
+        socket.join(roomId);
+        console.log(`User joined in the location sharing ${roomId}`);
+      })
+
+      //Event for location sharing
+      socket.on('shareLocation',async(data) => {
+        const {roomId,senderId,longitude,latitude} = data;
+        
+
+        try {
+          let updatedLocationDocument = await TrackingService.updateTrackingDocument(roomId, senderId, longitude, latitude);
+
+        //Broadcast the updated
+        io.to(roomId).emit('shareLocation',{senderId,latitude,longitude});
+        } catch (error) {
+          console.log(
+            `EventName | shareLocation - Error, errorMessage - ${error.message}`);
+            socket.emit("error", "Internal Server Error");
+        }
+      })
+
+      //Event for location sharing stopping
+      socket.on('stopLocationSharing', async(data) => {
+        const {roomId, senderId} = data;
+
+        try {
+          let stoppedLocationDocumen = await TrackingService.stopTracking(roomId,senderId);
+
+        io.to(roomId).emit('stopLocationSharing',{senderId});
+        } catch (error) {
+          console.log(
+            `EventName | stopLocationSharing - Error, errorMessage - ${error.message}`);
+            socket.emit("error", "Internal Server Error");
+        }
+      })
 
       socket.on("disconnect", () => {
         console.log("user disconnected");
