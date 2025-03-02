@@ -15,6 +15,8 @@ class Controller{
         let {latitude,longitude} = req.body;
 
         try {
+            latitude = parseFloat(latitude); 
+            longitude = parseFloat(longitude);
             //check first tracking is already created or not
             let getTrackingDetails = await TrackingService.getTrackingDetails(roomId,senderId);
             console.log(`Fetched tracking details by getTrackingDetails is ${getTrackingDetails}`);
@@ -25,6 +27,10 @@ class Controller{
             if(!getTrackingDetails){
                 trackingDetails = await TrackingService.createTrackingDetails(roomId,senderId,latitude,longitude);
                 console.log(`created tracking details trackingDetails is ${trackingDetails}`);
+            }
+
+            if(getTrackingDetails?.isActive == true){
+                return res.status(200).json(new ApiResponse(200,null,'Location tracking room is already created'));
             }
             
             //Need to add condtion to check isActive or not

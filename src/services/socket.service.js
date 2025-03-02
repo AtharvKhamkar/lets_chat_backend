@@ -93,13 +93,13 @@ class SocketService {
       //Event for location sharing
       socket.on('shareLocation',async(data) => {
         const {roomId,senderId,longitude,latitude} = data;
-        
-
+        console.log(`received data from the frontend is ${roomId} ${senderId} ${longitude} ${latitude}`);
+      
         try {
           let updatedLocationDocument = await TrackingService.updateTrackingDocument(roomId, senderId, longitude, latitude);
 
         //Broadcast the updated
-        io.to(roomId).emit('shareLocation',{senderId,latitude,longitude});
+        io.to(roomId).emit('shareLocation',{roomId,senderId,latitude,longitude});
         } catch (error) {
           console.log(
             `EventName | shareLocation - Error, errorMessage - ${error.message}`);
@@ -114,7 +114,7 @@ class SocketService {
         try {
           let stoppedLocationDocumen = await TrackingService.stopTracking(roomId,senderId);
 
-        io.to(roomId).emit('stopLocationSharing',{senderId});
+        io.to(roomId).emit('stopLocationSharing',{roomId,senderId});
         } catch (error) {
           console.log(
             `EventName | stopLocationSharing - Error, errorMessage - ${error.message}`);
