@@ -99,7 +99,7 @@ class SocketService {
           let updatedLocationDocument = await TrackingService.updateTrackingDocument(roomId, senderId, longitude, latitude);
 
         //Broadcast the updated
-        io.to(roomId).emit('shareLocation',{roomId,senderId,latitude,longitude});
+        socket.to(roomId).emit('shareLocation',{roomId,senderId,latitude,longitude});
         } catch (error) {
           console.log(
             `EventName | shareLocation - Error, errorMessage - ${error.message}`);
